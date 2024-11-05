@@ -59,8 +59,22 @@ func main() {
 			fmt.Println("Invalid input. Please enter a single letter.")
 			continue
 		}
+
+		letter := rune(input[0])
+
+		if isCorrectGuess(targetWord, letter) {
+			guessedLetters[letter] = true
+		} else {
+			hangmanState++
+		}
+
 	}
 
+}
+
+func getRandomeWord() string {
+	targetWord := dictionary[rand.Intn(len(dictionary))]
+	return targetWord
 }
 
 func initializeGuessedLetters(targetWord string) map[rune]bool {
@@ -69,11 +83,6 @@ func initializeGuessedLetters(targetWord string) map[rune]bool {
 	guessedLetters[unicode.ToLower(rune(targetWord[len(targetWord)-1]))] = true
 
 	return guessedLetters
-}
-
-func getRandomeWord() string {
-	targetWord := dictionary[rand.Intn(len(dictionary))]
-	return targetWord
 }
 
 func printGameState(
@@ -120,4 +129,8 @@ func readInput() string {
 		panic(err)
 	}
 	return strings.TrimSpace(input)
+}
+
+func isCorrectGuess(targetWord string, letter rune) bool {
+	return strings.ContainsRune(targetWord, letter)
 }
